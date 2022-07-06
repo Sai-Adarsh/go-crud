@@ -1,4 +1,4 @@
-package main
+package updatejoke
 
 import (
 	"database/sql"
@@ -8,6 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
+
+type Joke struct {
+	ID    int    `json:"id" binding:"required"`
+	Likes int    `json:"likes"`
+	Joke  string `json:"joke" binding:"required"`
+}
 
 func UpdateJoke(c *gin.Context) {
 	// initialize the database

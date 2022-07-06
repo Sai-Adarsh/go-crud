@@ -5,6 +5,11 @@ import (
 
 	"context"
 	"fmt"
+	"go-crud/controllers/createjoke"
+	"go-crud/controllers/deletejoke"
+	"go-crud/controllers/jokehandler"
+	"go-crud/controllers/likejoke"
+	"go-crud/controllers/updatejoke"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -54,10 +59,10 @@ func main() {
 			})
 		})
 	}
-	api.GET("/jokes/", JokeHandler)
-	api.POST("/jokes/:newJoke", CreateJoke)
-	api.POST("/jokes/like/:jokeID", LikeJoke)
-	api.PATCH("/jokes/update/:jokeID/:newJoke", UpdateJoke)
-	api.DELETE("/jokes/delete/:jokeID", DeleteJoke)
+	api.GET("/jokes/", jokehandler.JokeHandler)
+	api.POST("/jokes/:newJoke", createjoke.CreateJoke)
+	api.POST("/jokes/like/:jokeID", likejoke.LikeJoke)
+	api.PATCH("/jokes/update/:jokeID/:newJoke", updatejoke.UpdateJoke)
+	api.DELETE("/jokes/delete/:jokeID", deletejoke.DeleteJoke)
 	router.Run(":3000")
 }
