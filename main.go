@@ -3,10 +3,16 @@ package main
 import (
 	"net/http"
 
+	"context"
+	"fmt"
+
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v9"
 	_ "github.com/go-sql-driver/mysql"
 )
+
+var ctx = context.Background()
 
 type Joke struct {
 	ID    int    `json:"id" binding:"required"`
@@ -14,7 +20,27 @@ type Joke struct {
 	Joke  string `json:"joke" binding:"required"`
 }
 
+func initRedis() {
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	err := rdb.Set(ctx, "key", "value", 0).Err()
+	if err != nil {
+		panic(err)
+	}
+
+	val, err := rdb.Get(ctx, "key").Result()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("key", val)
+}
+
 func main() {
+	initRedis()
 	// initialize the database
 	router := gin.Default()
 	router.Use(static.Serve("/", static.LocalFile("./views", true)))
